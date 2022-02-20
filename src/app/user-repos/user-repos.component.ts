@@ -7,36 +7,23 @@ import { GitService } from '../services/git.service';
   templateUrl: './user-repos.component.html',
   styleUrls: ['./user-repos.component.css'],
 })
-export class UserReposComponent implements OnInit, OnChanges {
+export class UserReposComponent implements OnChanges {
   @Input() totalRepos: number = 0;
   @Input() username!: string;
 
   userRepos: any = null;
   fetchingRepos: boolean = false;
+  repoQuery: string = '';
 
   currentPage: number = 1;
   maxPerPage: number = 10;
   maxPages: number = 5;
 
-  searchTimer: any;
-  searchTime: number = 500;
+  constructor(private gitService: GitService) {}
 
-  searchRepoForm: FormGroup = this.formBuilder.group({
-    query: '',
-  });
+  handleRepoSearched(repoQuery: string): void {
+    this.repoQuery = repoQuery;
 
-  constructor(
-    private gitService: GitService,
-    private formBuilder: FormBuilder
-  ) {}
-
-  ngOnInit(): void {
-    this.searchRepoForm.controls['query'].valueChanges.subscribe(() => {
-      this.setSearchTimer();
-    });
-  }
-
-  handleRepoSearched(): void {
     this.currentPage = 1;
     this.fetchRepos();
   }
@@ -53,19 +40,6 @@ export class UserReposComponent implements OnInit, OnChanges {
 
     this.currentPage = 1;
     this.fetchRepos();
-  }
-
-  // Timer to call API after user searches, timer is reset if the user keeps typing
-  setSearchTimer(): void {
-    if (this.searchTimer !== undefined) {
-      clearTimeout(this.searchTimer);
-      this.searchTimer = undefined;
-    }
-
-    this.searchTimer = setTimeout(
-      this.handleRepoSearched.bind(this),
-      this.searchTime
-    );
   }
 
   // If the number of total repositories changes, fetch repos
@@ -86,7 +60,7 @@ export class UserReposComponent implements OnInit, OnChanges {
         this.username,
         this.currentPage,
         this.maxPerPage,
-        this.searchRepoForm.value.query
+        this.repoQuery
       )
       .subscribe({
         next: (res) => {
@@ -102,23 +76,5 @@ export class UserReposComponent implements OnInit, OnChanges {
 
   resetState(): void {
     this.userRepos = null;
-  }
-
-  // Scroll to bottom of the window
-  scrollToBottom(): void {
-    window.scrollTo({
-      left: 0,
-      top: document.body.scrollHeight,
-      behavior: 'smooth',
-    });
-  }
-
-  // Scroll to top of the window
-  scrollToTop(): void {
-    window.scrollTo({
-      left: 0,
-      top: 0,
-      behavior: 'smooth',
-    });
   }
 }

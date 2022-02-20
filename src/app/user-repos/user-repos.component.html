@@ -1,14 +1,9 @@
-<form [formGroup]="searchRepoForm" class="mb-4 w-full">
-  <input
-    type="text"
-    class="w-full border border-gray-300 p-2 focus:outline-none"
-    placeholder="Search Repo..."
-    formControlName="query"
-  />
-</form>
+<app-search-repo
+  (onRepoSearched)="handleRepoSearched($event)"
+></app-search-repo>
 
 <div *ngIf="fetchingRepos">
-  <h3 class="w-full text-center text-lg sm:text-xl">Loading Repos...</h3>
+  <app-loader [text]="'Loading Repos...'"></app-loader>
 </div>
 
 <div *ngIf="userRepos && userRepos.total_count > 0">
@@ -30,19 +25,7 @@
 </div>
 
 <div *ngIf="!userRepos?.total_count && !fetchingRepos">
-  <h3 class="w-full text-center text-lg sm:text-xl">Couldn't find Repos :(</h3>
+  <app-error [text]="'Could not find repos :('"></app-error>
 </div>
 
-<button
-  (click)="scrollToTop()"
-  class="fixed bottom-20 right-5 hidden h-[40px] w-[40px] items-center justify-center rounded-[50%] bg-green-600 text-xl text-white sm:flex"
->
-  &uarr;
-</button>
-
-<button
-  (click)="scrollToBottom()"
-  class="fixed bottom-8 right-5 hidden h-[40px] w-[40px] items-center justify-center rounded-[50%] bg-green-600 text-xl text-white sm:flex"
->
-  &darr;
-</button>
+<app-navigate-page></app-navigate-page>

@@ -1,5 +1,5 @@
 <div *ngIf="fetchingProfile">
-  <h3 class="w-full text-center text-lg sm:text-xl">Loading Profile...</h3>
+  <app-loader [text]="'Loading Profile...'"></app-loader>
 </div>
 
 <div *ngIf="userProfile" class="flex flex-col gap-8">
@@ -37,7 +37,5 @@
 </div>
 
 <div *ngIf="!userProfile && !fetchingProfile">
-  <h3 class="w-full text-center text-lg sm:text-xl">
-    Couldn't find Profile :(
-  </h3>
+  <app-error [text]="'Could not find profile :('"></app-error>
 </div>
