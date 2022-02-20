@@ -24,8 +24,13 @@ export class GitService {
     max: number,
     query: string
   ): Observable<any> {
-    const req = `https://api.github.com/search/repositories?q=user:${username}%20${query}%20in:name%20sort:updated-asc&page=${page}&per_page=${max}`;
-    console.log(req);
-    return this.http.get<any>(req, { headers: this.headers });
+    const encodedQuery: string = encodeURI(
+      `user:${username} ${query} in:name sort:updated-asc`
+    );
+
+    return this.http.get<any>(
+      `https://api.github.com/search/repositories?q=${encodedQuery}&page=${page}&per_page=${max}`,
+      { headers: this.headers }
+    );
   }
 }

@@ -1,5 +1,4 @@
-import { Component, Input, OnChanges, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { Component, Input, OnChanges } from '@angular/core';
 import { GitService } from '../services/git.service';
 
 @Component({
@@ -17,7 +16,7 @@ export class UserDetailsComponent implements OnChanges {
 
   constructor(private gitService: GitService) {}
 
-  fetchUserProfile() {
+  fetchUserProfile(): void {
     this.resetState();
     this.fetchingProfile = true;
 
@@ -33,11 +32,11 @@ export class UserDetailsComponent implements OnChanges {
     });
   }
 
-  resetState() {
+  resetState(): void {
     this.userProfile = null;
   }
 
-  // Fetch profile for the new user
+  // Fetch profile for the new username
   ngOnChanges(): void {
     this.fetchUserProfile();
   }

@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, OnChanges } from '@angular/core';
+import { Component, Input, OnInit, OnChanges, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { GitService } from '../services/git.service';
 
@@ -41,13 +41,12 @@ export class UserReposComponent implements OnInit, OnChanges {
     this.fetchRepos();
   }
 
-  // Handle pagination change event
   handlePageChanged(page: number): void {
     this.currentPage = page;
     this.fetchRepos();
   }
 
-  // Handle pagination customizations
+  // Handle pagination option changes
   handleCustomizedChanges(changes: any): void {
     this.maxPerPage = Number(changes.maxPerPage);
     this.maxPages = Number(changes.maxPages);
@@ -56,7 +55,8 @@ export class UserReposComponent implements OnInit, OnChanges {
     this.fetchRepos();
   }
 
-  setSearchTimer() {
+  // Timer to call API after user searches, timer is reset if the user keeps typing
+  setSearchTimer(): void {
     if (this.searchTimer !== undefined) {
       clearTimeout(this.searchTimer);
       this.searchTimer = undefined;
@@ -68,6 +68,7 @@ export class UserReposComponent implements OnInit, OnChanges {
     );
   }
 
+  // If the number of total repositories changes, fetch repos
   ngOnChanges(): void {
     if (this.totalRepos > 0) {
       this.currentPage = 1;
@@ -99,10 +100,11 @@ export class UserReposComponent implements OnInit, OnChanges {
       });
   }
 
-  resetState() {
+  resetState(): void {
     this.userRepos = null;
   }
 
+  // Scroll to bottom of the window
   scrollToBottom(): void {
     window.scrollTo({
       left: 0,
@@ -111,6 +113,7 @@ export class UserReposComponent implements OnInit, OnChanges {
     });
   }
 
+  // Scroll to top of the window
   scrollToTop(): void {
     window.scrollTo({
       left: 0,
