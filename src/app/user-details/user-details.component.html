@@ -1,0 +1,43 @@
+<div *ngIf="fetchingProfile">
+  <h3 class="w-full text-center text-lg sm:text-xl">Loading Profile...</h3>
+</div>
+
+<div *ngIf="userProfile" class="flex flex-col gap-8">
+  <div class="flex flex-col gap-8">
+    <div class="flex flex-col items-center gap-4">
+      <img
+        [src]="userProfile.avatar_url"
+        class="h-[150px] w-[150px] rounded-[50%]"
+      />
+      <h1 class="text-xl font-semibold">{{ userProfile.name }}</h1>
+      <h2 *ngIf="userProfile.bio" class="text-center text-lg">
+        {{ userProfile.bio }}
+      </h2>
+      <h3 *ngIf="userProfile.location" class="italic text-gray-400">
+        {{ userProfile.location }}
+      </h3>
+      <a
+        [href]="userProfile.html_url"
+        class="w-[165px] bg-green-600 px-4 py-2 text-center text-white"
+        >View On GitHub</a
+      >
+      <a
+        *ngIf="userProfile.twitter_username"
+        [href]="twitterUrl + userProfile.twitter_username"
+        class="w-[165px] bg-blue-600 px-4 py-2 text-center text-white"
+        >View On Twitter</a
+      >
+    </div>
+  </div>
+
+  <app-user-repos
+    [totalRepos]="userProfile.public_repos"
+    [username]="username"
+  ></app-user-repos>
+</div>
+
+<div *ngIf="!userProfile && !fetchingProfile">
+  <h3 class="w-full text-center text-lg sm:text-xl">
+    Couldn't find Profile :(
+  </h3>
+</div>

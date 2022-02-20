@@ -1,0 +1,70 @@
+<div *ngIf="totalData" class="flex flex-col items-center gap-4">
+  <div class="flex items-center gap-6">
+    <button
+      (click)="shiftPagesByMax(false)"
+      [disabled]="currentPages[0] === 1"
+      class="bg-green-600 px-4 py-2 text-white disabled:bg-gray-600"
+    >
+      Older
+    </button>
+    <button
+      class="text-green-600 disabled:text-gray-600"
+      [disabled]="currentPage - 1 < 1"
+      (click)="goToPage.emit(currentPage - 1)"
+    >
+      &larr;
+    </button>
+
+    <div class="flex flex-wrap items-center justify-center gap-2">
+      <button
+        *ngFor="let page of currentPages"
+        class="flex h-[20px] w-[20px] items-center justify-center rounded-[50%] text-xs text-green-600 disabled:text-gray-600 sm:h-[30px] sm:w-[30px] sm:text-sm"
+        [ngClass]="{ 'bg-green-600 !text-white': currentPage === page }"
+        [disabled]="page > requiredPages"
+        (click)="goToPage.emit(page)"
+      >
+        {{ page }}
+      </button>
+    </div>
+
+    <button
+      class="text-green-600 disabled:text-gray-600"
+      [disabled]="currentPage + 1 > requiredPages"
+      (click)="goToPage.emit(currentPage + 1)"
+    >
+      &rarr;
+    </button>
+    <button
+      class="bg-green-600 px-4 py-2 text-white disabled:bg-gray-600"
+      (click)="shiftPagesByMax(true)"
+    >
+      Newer
+    </button>
+  </div>
+  <button
+    class="mt-4 flex w-full justify-center text-lg italic text-green-600"
+    (click)="toggleCustomizePagination()"
+  >
+    Customize Pagination
+  </button>
+  <form
+    class="mt-8 flex flex-col gap-4"
+    *ngIf="customizingPagination"
+    [formGroup]="paginationOptionForm"
+    (ngSubmit)="onSaveCustomizedChanges()"
+  >
+    <label
+      >Max Entries Per Page ({{ paginationOptionForm.value.maxPerPage }})</label
+    >
+    <input type="range" min="1" max="100" formControlName="maxPerPage" />
+    <label>Max Pages ({{ paginationOptionForm.value.maxPages }})</label>
+    <input type="range" min="1" max="10" formControlName="maxPages" />
+    <button
+      type="submit"
+      class="rounded-md bg-green-600 px-4 py-2 text-white disabled:bg-gray-600"
+      [disabled]="paginationOptionForm.invalid"
+    >
+      Save Changes
+    </button>
+  </form>
+</div>
