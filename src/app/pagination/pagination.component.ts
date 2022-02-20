@@ -3,6 +3,7 @@ import {
   EventEmitter,
   Input,
   OnChanges,
+  OnInit,
   Output,
   SimpleChanges,
 } from '@angular/core';
@@ -13,7 +14,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
   templateUrl: './pagination.component.html',
   styleUrls: ['./pagination.component.css'],
 })
-export class PaginationComponent implements OnChanges {
+export class PaginationComponent implements OnInit, OnChanges {
   @Input() currentPage!: number;
   @Input() totalData!: number;
 
@@ -22,11 +23,7 @@ export class PaginationComponent implements OnChanges {
 
   requiredPages: number = 0;
 
-  // Range of pages to show, if maxPages is 10 this will default to an array of [1, ..., 10]
-  currentPages: number[] = Array.from(
-    { length: this.maxPages },
-    (_, i) => i + 1
-  );
+  currentPages: number[] = [];
 
   @Output() goToPage: EventEmitter<number> = new EventEmitter();
   @Output() saveCustomizedChanges: EventEmitter<Object> = new EventEmitter();
@@ -66,8 +63,20 @@ export class PaginationComponent implements OnChanges {
     this.customizingPagination = false;
   }
 
+  ngOnInit(): void {
+    // Calculates Range of pages to show, if current page is 14 and maxPages is 10, this will be [11, ..., 20]
+    this.currentPages = Array.from(
+      { length: this.maxPages },
+      (_, i) =>
+        this.currentPage -
+        1 -
+        ((this.currentPage - 1) % this.maxPages) +
+        (i + 1)
+    );
+  }
+
   ngOnChanges(changes: SimpleChanges): void {
-    const { currentPage, maxPerPage, totalData, maxPages } = changes;
+    const { maxPerPage, totalData, maxPages } = changes;
 
     // If max entries per page changes, re-calculate pages required to show the data
     if (maxPerPage && maxPerPage.previousValue !== maxPerPage.currentValue) {
@@ -91,18 +100,6 @@ export class PaginationComponent implements OnChanges {
     // If max entries per page changes, re-calculate pages required to show the data
     if (totalData && totalData.previousValue !== totalData.currentValue) {
       this.requiredPages = Math.ceil(this.totalData / this.maxPerPage);
-    }
-
-    if (currentPage && currentPage.previousValue !== currentPage.currentValue) {
-      // Check if current page is greater than max number of pages allowed
-      if (
-        currentPage.currentValue >
-        this.currentPages[this.currentPages.length - 1]
-      ) {
-        this.shiftPagesByMax(true);
-      } else if (currentPage.currentValue < this.currentPages[0]) {
-        this.shiftPagesByMax(false);
-      }
     }
   }
 }
