@@ -10,7 +10,10 @@
         class="h-[150px] w-[150px] rounded-[50%]"
       />
       <h1 class="text-xl font-semibold">{{ userProfile.name }}</h1>
-      <h2 *ngIf="userProfile.bio" class="text-center text-lg">
+      <h2
+        *ngIf="userProfile.bio"
+        class="max-w-full text-center text-lg sm:max-w-[40%]"
+      >
         {{ userProfile.bio }}
       </h2>
       <h3 *ngIf="userProfile.location" class="italic text-gray-400">
