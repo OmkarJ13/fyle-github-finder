@@ -9,7 +9,9 @@ import { Observable } from 'rxjs';
 })
 export class GitService {
   // Auth token to increase API time limit
-  headers: HttpHeaders = new HttpHeaders({ Authorization: `token ${PAT}` });
+  headers: HttpHeaders = new HttpHeaders({
+    Authorization: `token ${PAT}`,
+  });
   constructor(private http: HttpClient) {}
 
   fetchUserProfile(username: string): Observable<any> {
