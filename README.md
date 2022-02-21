@@ -1,4 +1,5 @@
-# To run the app locally, create a constants.ts file in the src directory and set your personal access token inside of it
+# To run the app locally, create a constants.ts file in the src directory and set your personal access token inside of it.
+# While creating the personal access token, please select access for reading public repos and user data
 
 # FyleGithubFinder
 
