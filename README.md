@@ -1,5 +1,6 @@
+# To run the app locally, create a constants.ts file in the root directory and set your personal access token inside of it
+
 # FyleGithubFinder
-To run the app locally, create a constants.ts file in the root directory and set your personal access token inside of it
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 13.2.4.
 
